@@ -16,5 +16,7 @@ class return_pembelian extends Model
     protected $fillable = [
         'id',
         'no_faktur',
+        'tgl_return',
+        'nama_akun'
     ];
 }

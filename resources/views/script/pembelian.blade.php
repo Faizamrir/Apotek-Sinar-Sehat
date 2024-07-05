@@ -77,7 +77,6 @@
             subtotal: total
         });
         table.clear().rows.add(data).draw();
-
     }
 
     function validation() {

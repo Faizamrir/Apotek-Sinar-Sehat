@@ -80,10 +80,13 @@ Route::controller(App\Http\Controllers\SupplierController::class, 'index')->midd
 Route::controller(App\Http\Controllers\FakturController::class, 'index')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/faktur', 'index')->name('faktur.index');
     Route::post('faktur/update-status', 'faktur_lunas')->name('faktur.update-status');
+    Route::get('/faktur/get-faktur', 'get_faktur_all')->name('faktur.get-faktur');
+    Route::get('/faktur/get-faktur-id/{id}', 'get_faktur_by_id')->name('faktur.get-faktur-id');
 });
 
 Route::controller(App\Http\Controllers\ReturnPembelianController::class, 'index')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/returnpembelian', 'index')->name('returnpembelian.index');
+    Route::post('/returnpembelian/store', 'store')->name('returnpembelian.store');
 });
 
 

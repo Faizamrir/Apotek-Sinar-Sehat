@@ -9,9 +9,13 @@ class penjualan extends Model
 {
     use HasFactory;
 
+    public function detail_penjualan(){
+        return $this->hasMany(detail_penjualan::class);
+    }
+
     protected $fillable = [
-        'obat',
-        'jumlah',
+        'uang_bayar',
+        'uang_kembali',
         'total',
         'nama_akun',
     ];

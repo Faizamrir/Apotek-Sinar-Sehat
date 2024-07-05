@@ -26,6 +26,10 @@ class Obat extends Model
         return $this->hasMany(detail_return_pembelian::class, 'id_obat', 'id');
     }
 
+    function penjualan(){
+        return $this->hasMany(detail_penjualan::class, 'id_obat', 'id');
+    }
+
     protected $fillable = [
         'nama_obat',
         'stok',

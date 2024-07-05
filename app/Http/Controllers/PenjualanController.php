@@ -6,6 +6,9 @@ use App\Models\penjualan;
 use App\Http\Requests\StorepenjualanRequest;
 use App\Http\Requests\UpdatepenjualanRequest;
 use App\Models\Obat;
+use App\Models\detail_penjualan;
+use App\Models\Pemakaian;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Carbon\Carbon;
@@ -22,9 +25,7 @@ class PenjualanController extends Controller
     public function index()
     {
         $get_obat = Obat::all();
-        $penjualans = penjualan::all()->where('nama_akun', Auth::user()->name)->where('created_at', '>=' , Carbon::today());
-        $totals = penjualan::all()->where('nama_akun', Auth::user()->name)->where('created_at', '>=' , Carbon::today())->sum('total');
-        return view('penjualan', compact('penjualans', 'get_obat', 'totals'));
+        return view('penjualan', compact('get_obat'));
     }
 
     /**
@@ -40,42 +41,42 @@ class PenjualanController extends Controller
      */
     public function store(StorepenjualanRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'obat' => 'required',
-            'jumlah' => 'required|numeric',
-            'total' => 'required|numeric',
-            'nama_akun' => 'required',
-        ]);
+        
+        $data_penjualan = [
+            'uang_bayar' => $request->get('uang_bayar'),
+            'total' => $request->get('total'),
+            'uang_kembali' => $request->get('uang_kembali'),
+            'nama_akun' => Auth::user()->name,
+        ];
 
-        if($validator->fails()){
-            return redirect()
-            ->back()
-            ->withErrors($validator)
-            ->withInput();
-        }else{
-            $data = [
-                'obat' => $request->get('obat'),
-                'jumlah' => $request->get('jumlah'),
-                'total' => $request->get('total'),
-                'nama_akun' => $request->get('nama_akun'),
-            ];
-        }
+        $penjualan = penjualan::create($data_penjualan);
 
+        $data_detail = $request->get('table_data');
 
-        $pemakaian = new PemakaianController;
-        $pemakaian = $pemakaian->store($data);
+        foreach ($data_detail as $data) {
+            detail_penjualan::create([
+                'id_penjualan' => $penjualan->id,
+                'id_obat' => $data['id_obat'],
+                'harga' => $data['harga'],
+                'jumlah' => $data['jumlah'],
+                'subtotal' => $data['subtotal'],
+            ]);
 
-        $obat = Obat::where('nama_obat', $request->get('obat'))->first();
-        if(!empty($obat) && $obat->stok >= $request->get('jumlah')) {
-            $obat->stok = $obat->stok - $request->get('jumlah');
+            $obat = Obat::where('id', $data['id_obat'])->first();
+            if($obat){
+            $obat->stok = $obat->stok - $data['jumlah'];
             $obat->save();
-        }else{
-            notify()->warning('Stok obat tidak mencukupi');
-            return redirect()->route('penjualan.index');
-        }
+            }
 
-        penjualan::create($data);
+            $pemakaian = Pemakaian::create([
+                'nama_obat' => $obat['nama_obat'],
+                'jumlah' => $data['jumlah'],
+            ]);
+        };
+
+        notify()->success('Data Penjualan berhasil ditambahkan');
         return redirect()->route('penjualan.index')->with('success', 'Data penjualan berhasil ditambahkan');
+  
     }
 
     /**

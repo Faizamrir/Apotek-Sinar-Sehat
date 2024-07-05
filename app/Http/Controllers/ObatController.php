@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Obat;
 use App\Models\satuan;
 use App\Models\supplier;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Requests\StoreObatRequest;
 use App\Http\Requests\UpdateObatRequest;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -147,4 +149,5 @@ class ObatController extends Controller
         notify()->warning('Obat sudah kadaluarsa');
         return Redirect::index();
     }
+
 }

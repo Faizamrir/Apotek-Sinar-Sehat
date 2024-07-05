@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('return_pembelians', function (Blueprint $table) {
             $table->id();
-            $table->string('no_faktur');
+            $table->unsignedBigInteger('no_faktur');
+            $table->date('tgl_return');
+            $table->string('nama_akun');
             $table->timestamps();
         });
     }

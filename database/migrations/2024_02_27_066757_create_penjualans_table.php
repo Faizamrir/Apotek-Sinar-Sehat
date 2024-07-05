@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('penjualans', function (Blueprint $table) {
             $table->id();
-            $table->string('obat');
-            $table->string('jumlah');
+            $table->integer('uang_bayar');
             $table->string('total');
+            $table->integer('uang_kembali');
             $table->string('nama_akun');
             $table->timestamps();
         });

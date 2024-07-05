@@ -23,13 +23,13 @@
                 <div class="mb-3 row">
                     <label for="stok" class="col-sm-2 col-form-label">Stok</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" name='stok' id="stok">
+                        <input type="number" class="form-control" name='stok' min="0" id="stok">
                     </div>
                 </div>
                 <div class="mb-2 row">
                     <label for="harga" class="col-sm-2 col-form-label">Harga</label>
                     <div class="col-sm-10">
-                            <input type="number" class="form-control" name='harga' id="harga">
+                            <input type="number" class="form-control" name='harga' min="0" id="harga">
                     </div>
                 </div>
                 
@@ -67,8 +67,8 @@
                 <!-- AKHIR FORM -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="bg-white hover:bg-gray-100 hover:text-gray-500 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="bg-white hover:bg-gray-100 hover:text-gray-500 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow btnSimpan">tambah</button>
+                <button type="button" class="px-4 py-2 font-semibold text-gray-800 bg-white border border-gray-400 rounded shadow hover:bg-gray-100 hover:text-gray-500" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="px-4 py-2 font-semibold text-gray-800 bg-white border border-gray-400 rounded shadow hover:bg-gray-100 hover:text-gray-500 btnSimpan">tambah</button>
             </div>
         </form>
         </div>
