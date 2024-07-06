@@ -1,7 +1,7 @@
 <script>
     $(document).ready(function() {
         $('#supplier_table').DataTable();
-    });
+    
 
 
     $('body').on('click', '#tombol-tambah', function(e) {
@@ -13,8 +13,8 @@
         $('.btnSimpan').text('Simpan');
     });
 
-    $(document).ready(function(e) {
-        $('.editSupplier').click(function(e) {
+
+        $('body').on('click','.editSupplier', function(e) {
             e.preventDefault();
             let id_supplier = $(this).data('id');
             $.ajax({
@@ -35,7 +35,6 @@
                 }
             });
         })
-    });
 
     $('#modalsupplier').on('hidden.bs.modal', function() {
         $('#nama_supplier').val('');
@@ -50,4 +49,6 @@
         $('.alert-success').addClass('d-none');
         $('.alert-success').html('');
     });
+
+});
 </script>

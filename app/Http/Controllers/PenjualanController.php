@@ -121,9 +121,8 @@ class PenjualanController extends Controller
 
     public function cetak_laporan(Request $request){
         $tgl = Carbon::createFromFormat('Y-m-d', $request->get('tgl'));
-        $penjualans = penjualan::whereDate('created_at', '=', $tgl)->get();
-        $totals = penjualan::all()->where('created_at', '=' , $tgl)->sum('total');
-
+        $penjualans = penjualan::with('detail_penjualan')->whereDate('created_at', '=', $tgl)->get();
+        $totals = penjualan::whereDate('created_at', '=', $tgl)->sum('total');
         if($penjualans->isNotEmpty()){
             $laporan = PDF::loadView('laporan.penjualan', compact('penjualans', 'totals'));
             return $laporan->stream();
@@ -135,7 +134,7 @@ class PenjualanController extends Controller
     public function cetak_laporan_bulanan(Request $request){
         $dateString = $request->get('bulan');
         $date = Carbon::createFromFormat('Y-m', $dateString);
-        $penjualans = penjualan::whereYear('created_at', $date->year)
+        $penjualans = penjualan::with('detail_penjualan')->whereYear('created_at', $date->year)
                                 ->whereMonth('created_at', $date->month)
                                 ->get();
 

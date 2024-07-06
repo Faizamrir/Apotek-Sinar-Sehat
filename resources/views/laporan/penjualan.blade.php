@@ -27,14 +27,15 @@
         </tr>
     </thead>
     <tbody>
-
     @foreach($penjualans as $penjualan)
-    <tr>
-        <td>{{$penjualan->created_at}}</td>
-        <td>{{$penjualan->obat}}</td>
-        <td>{{$penjualan->jumlah}}</td>
-        <td>{{$penjualan->total}}</td>
-    </tr>
+        @foreach($penjualan->detail_penjualan as $detail)
+            <tr>
+                <td>{{$penjualan->created_at}}</td>
+                <td>{{$detail->obat->nama_obat}}</td>
+                <td>{{$detail->jumlah}}</td>
+                <td>{{$detail->subtotal}}</td>
+            </tr>
+        @endforeach
     @endforeach
     <tr>
         <td colspan="3" align="right">Total</td>

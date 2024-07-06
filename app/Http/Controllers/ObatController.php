@@ -49,7 +49,7 @@ class ObatController extends Controller
             'nama_obat' => 'required',
             'stok' => 'required|numeric',
             'harga' => 'required|numeric',
-            'expired' => 'required',
+            // 'expired' => 'required',
         ]);
 
         if($validator->fails()){
@@ -100,7 +100,7 @@ class ObatController extends Controller
             'nama_obat' => 'required',
             'stok' => 'required|numeric',
             'harga' => 'required|numeric',
-            'expired' => 'required',
+            // 'expired' => 'required',
         ]);
 
         if($validator->fails()){
