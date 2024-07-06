@@ -121,10 +121,15 @@ class PenjualanController extends Controller
 
     public function cetak_laporan(Request $request){
         $tgl = Carbon::createFromFormat('Y-m-d', $request->get('tgl'));
-        $penjualans = penjualan::with('detail_penjualan')->whereDate('created_at', '=', $tgl)->get();
+        $akun = penjualan::whereDate('created_at', '=', $tgl)->distinct()->pluck('nama_akun');
+        $transaksi_perakun = [];
+        foreach($akun as $a){
+            $penjualans = penjualan::with('detail_penjualan')->whereDate('created_at', '=', $tgl)->where('nama_akun', $a)->get();
+            $transaksi_perakun[$a] = $penjualans;
+        }
         $totals = penjualan::whereDate('created_at', '=', $tgl)->sum('total');
         if($penjualans->isNotEmpty()){
-            $laporan = PDF::loadView('laporan.penjualan', compact('penjualans', 'totals'));
+            $laporan = PDF::loadView('laporan.penjualan', compact('transaksi_perakun', 'totals', 'tgl'));
             return $laporan->stream();
         } else {
             return redirect()->route('laporan')->with('error', 'Data tidak ditemukan');
