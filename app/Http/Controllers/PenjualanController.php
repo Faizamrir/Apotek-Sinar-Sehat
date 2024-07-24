@@ -28,6 +28,9 @@ class PenjualanController extends Controller
         return view('penjualan', compact('get_obat'));
     }
 
+    public function penjualanView(){
+        return view('list-penjualan');
+    }
     /**
      * Show the form for creating a new resource.
      */

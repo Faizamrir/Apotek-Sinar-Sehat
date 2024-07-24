@@ -42,6 +42,7 @@ route::controller(App\Http\Controllers\PenjualanController::class, 'index')->mid
     Route::post('/penjualan/store', 'store')->name('penjualan.store');
     Route::get('/penjualan/cetak-laporan/{tgl}', 'cetak_laporan')->name('penjualan.cetak-pdf');
     Route::get('/penjualan/cetak-laporan-bulanan/{bulanan}', 'cetak_laporan_bulanan')->name('penjualan.cetak-pdf-bulanan');
+    Route::get('/list-penjualan', 'penjualanView')->name('penjualan.list-penjualan');
 });
 
 Route::controller(App\Http\Controllers\PembelianController::class, 'index')->middleware(['auth', 'verified'])->group(function () {

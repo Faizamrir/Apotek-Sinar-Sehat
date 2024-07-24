@@ -55,34 +55,5 @@
     </tbody>
     </table>
     @endforeach
- 
-    {{-- <br>
-    <table class='table table-bordered'>
-        <thead>
-            <tr>
-                <th>Tgl Transaksi</th>
-                <th>Nama Obat</th>
-                <th>Jumlah</th>
-                <th>Subotal</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach($penjualans as $penjualan)
-            @foreach($penjualan->detail_penjualan as $detail)
-                <tr>
-                    <td>{{$penjualan->created_at}}</td>
-                    <td>{{$detail->obat->nama_obat}}</td>
-                    <td>{{$detail->jumlah}}</td>
-                    <td>{{$detail->subtotal}}</td>
-                </tr>
-            @endforeach
-        @endforeach
-        <tr>
-            <td colspan="3" align="right">Total</td>
-            <td>{{$totals}}</td>
-        </tr>
-        </tbody>
-        </table> --}}
-
 </body>
 </html>

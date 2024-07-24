@@ -11,6 +11,14 @@ let total = 0;
                 {data: 'harga'},
                 {data: 'jumlah'},
                 {data: 'subtotal'},
+                {
+                    data: null,
+                    className: 'dt-body-center',
+                    orderable: false,
+                    render: function(data, type, row, meta) {
+                        return '<button class="btnDelete" data-row-id="' + data.id_obat + '"><i class="text-red-600 bi bi-trash"></i></button>';
+                    }
+                }
             ],
             columnDefs: [
                 {
@@ -39,10 +47,38 @@ let total = 0;
                 }, 0);
 
             // Update footer
-            $(api.column(4).footer()).html('Total: ' + total);
+            $(api.column(5).footer()).html('Total: ' + total);
             $('#total').val(formatRupiah(total.toString(), 'Rp. '));
         }
         });
+    });
+
+    $('#penjualan_table tbody').on('click', '.btnDelete', function () {
+       let id_obat = $(this).data('row-id');
+       
+       var index = data.findIndex(function(item) {
+            return item.id_obat === id_obat;
+        });
+       
+       if(index !== -1) {
+           data.splice(index, 1);
+           table.clear().rows.add(data).draw();
+
+           let total = table
+            .column(4)
+            .data()
+            .reduce(function(a, b) {
+                return a + b;
+            }, 0);
+
+            // var total = data.reduce(function(sum, row) {
+            //     return sum + parseFloat(row.subtotal);
+            // }, 0);
+
+            // Update footer
+            table.column(5).footer().innerHTML = 'Total: ' + total;
+            $('#total').val(formatRupiah(total.toString(), 'Rp. '));
+       }
     });
 
     $('#harga, #obat').on("change",function () {
@@ -154,6 +190,7 @@ let total = 0;
             jumlah: jumlah,
             subtotal: subtotal,
         });
+        console.log(data);
         table.clear().rows.add(data).draw();
     }
 

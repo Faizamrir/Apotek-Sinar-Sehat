@@ -74,6 +74,7 @@
                                     <th>Harga</th>
                                     <th>Jumlah</th>
                                     <th>Subtotal</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,7 +91,7 @@
                                     <td>{{ $totals }}</td>
                                 </tr> --}}
                             </tbody>
-                            <tfoot><tr><th></th><th></th><th></th><th></th><th></th></tr></tfoot>
+                            <tfoot><tr><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>
                         </table>
                         <div class="flex items-center justify-end mt-4">
                             <br>
