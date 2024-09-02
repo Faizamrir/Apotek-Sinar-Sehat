@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\penjualan;
+use App\Exports\PenjualanExport;
 use App\Http\Requests\StorepenjualanRequest;
 use App\Http\Requests\UpdatepenjualanRequest;
 use App\Models\Obat;
@@ -12,11 +13,13 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PenjualanController extends Controller
 {
@@ -144,22 +147,26 @@ class PenjualanController extends Controller
     public function cetak_laporan_bulanan(Request $request){
         $dateString = $request->get('bulan');
         $date = Carbon::createFromFormat('Y-m', $dateString);
-        $penjualans = penjualan::with('detail_penjualan')->whereYear('created_at', $date->year)
-                                ->whereMonth('created_at', $date->month)
-                                ->get();
+        // $date = Carbon::createFromFormat('Y-m', $dateString);
+        // dd($date->daysInMonth);
+        // $penjualans = penjualan::with('detail_penjualan')->whereYear('created_at', $date->year)
+        //                         ->whereMonth('created_at', $date->month)
+        //                         ->get();
                                 
         // Storage::disk('public')->put('data.json', json_encode($penjualans));
 
         // dd($penjualans);
 
-        $totals = penjualan::whereYear('created_at', $date->year)
-                                ->whereMonth('created_at', $date->month)
-                                ->sum('total');
+        
+        // $totals = penjualan::whereYear('created_at', $date->year)
+        //                         ->whereMonth('created_at', $date->month)
+        //                         ->sum('total');
 
 
-        if($penjualans->isNotEmpty() ){
-            $laporan = PDF::loadView('laporan.penjualan-bulanan', compact('penjualans', 'totals'));
-            return $laporan->stream('laporan-penjualan-bulanan.pdf');
+        if($dateString != null ){
+            // $laporan = PDF::loadView('laporan.penjualan-bulanan', compact('penjualans', 'totals'));
+            // return $laporan->stream('laporan-penjualan-bulanan.pdf');
+            return Excel::download(new PenjualanExport($dateString), 'laporan-penjualan-bulan-'.$date->monthName.'-'.$date->year.'.xlsx');
         } else {
             return redirect()->route('laporan')->with('error', 'Data tidak ditemukan');
         }
