@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nama_obat');
             $table->integer('jumlah');
+            $table->unsignedBigInteger('id_obat');
             $table->timestamps();
+            $table->foreign('id_obat')->references('id')->on('obats')->onDelete('cascade');
         });
     }
 

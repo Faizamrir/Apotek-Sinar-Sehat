@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PemakaianExport;
 use App\Models\Pemakaian;
+use App\Models\Obat;
 use App\Http\Requests\StorePemakaianRequest;
 use App\Http\Requests\UpdatePemakaianRequest;
 use Illuminate\Support\Facades\Validator;
@@ -12,6 +14,8 @@ use Carbon\Doctrine\CarbonType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Month;
 
 class PemakaianController extends Controller
 {
@@ -54,6 +58,7 @@ class PemakaianController extends Controller
         $data = [
                     'nama_obat' => $request['obat'],
                     'jumlah' => $request['jumlah'],
+
                 ];
         
         Pemakaian::create($data);
@@ -96,17 +101,33 @@ class PemakaianController extends Controller
         $dateString = $request->get('bulan');
         $date = Carbon::createFromFormat('Y-m', $dateString);
         
-        $pemakaian = Pemakaian::whereYear('created_at', $date->year)
-                                ->whereMonth('created_at', $date->month)
-                                ->select('nama_obat', DB::raw('SUM(jumlah) as total_pemakaian'))
-                                ->groupBy('nama_obat')->get();
+        // $pemakaian = Pemakaian::with('obat', 'obat.satuan')
+        //                         ->whereYear('created_at', $date->year)
+        //                         ->whereMonth('created_at', $date->month)
+        //                         ->select('nama_obat','id_obat', DB::raw('SUM(jumlah) as total_pemakaian'))
+        //                         ->groupBy('nama_obat')
+        //                         ->orderBy('total_pemakaian', 'desc')
+        //                         ->get();
 
-        if($pemakaian->isNotEmpty()){
-            $laporan = PDF::loadView('laporan.pemakaian', compact('pemakaian', 'date'));
-            return $laporan->stream();
-        } else {
+        // $get = new PemakaianExport($date);
+        // dd($get->query());
+
+        if($date != null ){
+            return (new PemakaianExport($date))->download('laporan-pemakaian-'.$date->monthName.'-'.$date->year.'.xlsx');
+            // $laporan = PDF::loadView('laporan.pemakaian', compact('pemakaian', 'date'));
+            // return $laporan->stream();
+        }else{
             return redirect()->route('laporan')->with('error', 'Data tidak ditemukan');
         }
+    }
+
+    public function refactoring_database(){
+        $obat = Obat::All();
+        foreach($obat as $o){
+            $pemakaian = Pemakaian::where('nama_obat', $o->nama_obat)
+            ->update(['id_obat' => $o->id]);
+        }
+        return true;
     }
 
 }

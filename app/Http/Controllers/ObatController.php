@@ -24,7 +24,7 @@ class ObatController extends Controller
 
     public function index()
     {
-        $obats = Obat::with('satuan', 'supplier')->get();
+        $obats = Obat::with('satuan', 'supplier')->orderBy('nama_obat', 'desc')->get();
         $get_satuan = satuan::all();
         $get_supplier = supplier::all();
         // notify()->success('Obat sudah kadaluarsa');
@@ -78,7 +78,7 @@ class ObatController extends Controller
      */
     public function show()
     {
-        $obat = Obat::all();
+        $obat = Obat::all()->sortBy('nama_obat');
         return $obat;
     }
 

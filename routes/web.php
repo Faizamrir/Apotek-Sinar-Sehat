@@ -54,6 +54,7 @@ Route::controller(App\Http\Controllers\PembelianController::class, 'index')->mid
 Route::controller(App\Http\Controllers\PemakaianController::class, 'index')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/pemakaian', 'index')->name('pemakaian.index');
     Route::get('/pemakaian/cetak-laporan/{tgl}', 'cetak_laporan')->name('pemakaian.cetak-pdf');
+    Route::get('/pemakaian/refactoring', 'refactoring_database')->name('pemakaian.refactoring');
 });
 
 route::get('/laporan', function () {

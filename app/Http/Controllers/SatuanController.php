@@ -99,7 +99,7 @@ class SatuanController extends Controller
      */
     public function destroy($id)
     {
-        if(Auth::user()->is_admin == '1'){
+        if(auth()->user()->is_admin == '1'){
             satuan::where('id', $id)->delete();
             notify()->success('Data Satuan berhasil dihapus');
             return redirect()->route('satuan.index');

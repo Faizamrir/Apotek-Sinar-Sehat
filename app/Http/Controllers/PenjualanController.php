@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PenjualanController extends Controller
 {
@@ -24,7 +25,7 @@ class PenjualanController extends Controller
      */
     public function index()
     {
-        $get_obat = Obat::all();
+        $get_obat = Obat::all()->sortBy('nama_obat');
         return view('penjualan', compact('get_obat'));
     }
 
@@ -49,7 +50,7 @@ class PenjualanController extends Controller
             'uang_bayar' => $request->get('uang_bayar'),
             'total' => $request->get('total'),
             'uang_kembali' => $request->get('uang_kembali'),
-            'nama_akun' => Auth::user()->name,
+            'nama_akun' => auth()->user()->name,
         ];
 
         $penjualan = penjualan::create($data_penjualan);
@@ -74,6 +75,7 @@ class PenjualanController extends Controller
             $pemakaian = Pemakaian::create([
                 'nama_obat' => $obat['nama_obat'],
                 'jumlah' => $data['jumlah'],
+                'id_obat' => $data['id_obat'],
             ]);
         };
 
@@ -145,14 +147,19 @@ class PenjualanController extends Controller
         $penjualans = penjualan::with('detail_penjualan')->whereYear('created_at', $date->year)
                                 ->whereMonth('created_at', $date->month)
                                 ->get();
+                                
+        // Storage::disk('public')->put('data.json', json_encode($penjualans));
+
+        // dd($penjualans);
 
         $totals = penjualan::whereYear('created_at', $date->year)
                                 ->whereMonth('created_at', $date->month)
                                 ->sum('total');
 
+
         if($penjualans->isNotEmpty() ){
             $laporan = PDF::loadView('laporan.penjualan-bulanan', compact('penjualans', 'totals'));
-            return $laporan->stream();
+            return $laporan->stream('laporan-penjualan-bulanan.pdf');
         } else {
             return redirect()->route('laporan')->with('error', 'Data tidak ditemukan');
         }

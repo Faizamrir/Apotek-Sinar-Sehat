@@ -22,6 +22,7 @@
         <tr>
             <th>Nama Obat</th>
             <th>Jumlah Pemakaian</th>
+            <th>satuan</th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +31,7 @@
     <tr>
         <td>{{$row->nama_obat}}</td>
         <td>{{$row->total_pemakaian}}</td>
+        <td>{{isset($row->obat->satuan[0]) ? $row->obat->satuan[0]->satuan : ''}}</td>
     </tr>
     @endforeach
     </tbody>
