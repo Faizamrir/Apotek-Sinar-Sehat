@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Obat;
 use App\Models\satuan;
 use App\Models\supplier;
+use App\Exports\ObatExport;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Requests\StoreObatRequest;
 use App\Http\Requests\UpdateObatRequest;
@@ -13,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class ObatController extends Controller
 {
@@ -148,6 +151,11 @@ class ObatController extends Controller
         $obat = Obat::where('expired', '<', date('Y-m-d'))->get();
         notify()->warning('Obat sudah kadaluarsa');
         return Redirect::index();
+    }
+
+    public function laporan_Daftar_Obat(){
+        $carbonDate = Carbon::now();
+        return Excel::download(new ObatExport(), 'Laporan Daftar Obat '.$carbonDate->isoFormat('DD-MM-YYYY').'.xlsx');
     }
 
 }

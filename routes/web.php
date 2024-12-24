@@ -35,6 +35,7 @@ Route::controller(App\Http\Controllers\ObatController::class)->middleware(['auth
     Route::put('/obat/update/{id}', 'update')->name('obat.update');
     Route::delete('/obat/destroy/{id}', 'destroy')->name('obat.destroy');
     Route::get('/obat/show/', 'show')->name('obat.show');
+    Route::get('/obat/laporan-daftar-obat', 'laporan_Daftar_Obat')->name('obat.laporan-daftar-obat');
 });
 
 route::controller(App\Http\Controllers\PenjualanController::class, 'index')->middleware(['auth', 'verified'])->group(function () {

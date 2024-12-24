@@ -79,7 +79,23 @@
                     </div>
                 </div>
             </div>
+            
+            <br>
+            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <h1 class="text-xl font-semibold leading-tight text-gray-800">Daftar Stok Obat</h1>
+                    <br>
+                    <form action="{{ route('obat.laporan-daftar-obat') }}">
+                    <div class="py-3">
+                    <button type="submit" class="px-4 py-2 font-semibold text-gray-800 bg-white border border-gray-400 rounded shadow hover:bg-gray-100 hover:text-gray-500">
+                        Cetak
+                    </button>
+                    </form>
+                    </div>
+                </div>
+            </div>
 
+            
         </div>
     </div>
 
