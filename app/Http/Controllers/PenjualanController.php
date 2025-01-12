@@ -128,6 +128,7 @@ class PenjualanController extends Controller
     }
 
     public function cetak_laporan(Request $request){
+        if(Auth::user()->is_admin == '1'){
         $tgl = Carbon::createFromFormat('Y-m-d', $request->get('tgl'));
         $akun = penjualan::whereDate('created_at', '=', $tgl)->distinct()->pluck('nama_akun');
         $transaksi_perakun = [];
@@ -142,9 +143,14 @@ class PenjualanController extends Controller
         } else {
             return redirect()->route('laporan')->with('error', 'Data tidak ditemukan');
         }
+        } else {
+            notify()->error('Pengaksesan laporan ditolak');
+            return redirect()->route('laporan');
+        }
     }
 
     public function cetak_laporan_bulanan(Request $request){
+        if(Auth::user()->is_admin == '1'){
         $dateString = $request->get('bulan');
         $date = Carbon::createFromFormat('Y-m', $dateString);
         // $date = Carbon::createFromFormat('Y-m', $dateString);
@@ -169,6 +175,10 @@ class PenjualanController extends Controller
             return Excel::download(new PenjualanExport($dateString), 'laporan-penjualan-bulan-'.$date->monthName.'-'.$date->year.'.xlsx');
         } else {
             return redirect()->route('laporan')->with('error', 'Data tidak ditemukan');
+        }
+        } else {
+            notify()->error('Pengaksesan laporan ditolak');
+            return redirect()->route('laporan');
         }
     }
 }
